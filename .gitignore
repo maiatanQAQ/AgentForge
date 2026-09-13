@@ -1,0 +1,21 @@
+# Local secrets — never commit
+.env
+
+# Logs and runtime state
+*.log
+chat.db
+chat.db-shm
+chat.db-wal
+rollout/
+.codex-tmp/
+dist/
+
+# Dependencies and build artifacts
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db

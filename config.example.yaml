@@ -1,0 +1,35 @@
+# ------------------------------------------------------------------
+# AgentForge additions for ~/.omnigent/config.yaml
+# Merge the blocks you need into your existing file, then restart the
+# omnigent daemon (`omnigent stop && omnigent run ...`).
+# ------------------------------------------------------------------
+
+# 1) Register the ZCode ACP bridge as an omnigent agent.
+#    Slug: "ZCode" -> harness id "acp:zcode".
+#    Replace <REPO_ROOT> with the absolute path of this repository.
+#
+#    `omnigent_mcp: false` keeps omnigent from relaying its own MCP servers
+#    into ZCode sessions — ZCode uses its native tools.
+#
+# acp:
+#   agents:
+#     - name: ZCode
+#       command: node <REPO_ROOT>/adapters/zcode-acp/zcode-acp-adapter.mjs
+#       omnigent_mcp: false
+
+# 2) Non-OpenAI model routing for the codex harness (optional but common).
+#
+#    If your codex CLI authenticates with an API key that routes through a
+#    custom provider table in ~/.codex/config.toml (e.g. a relay or another
+#    vendor), register it as kind `cli-config`. omnigent then pins THAT
+#    provider per session. Without this, omnigent treats an API-key login as
+#    an OpenAI subscription and forces `-c model_provider="openai"`, which
+#    fails with 401 against non-OpenAI keys.
+#
+# providers:
+#   my-codex-provider:
+#     kind: cli-config
+#     cli: codex
+#     model_provider: custom   # the [model_providers.<id>] table id in ~/.codex/config.toml
+#     display_name: My codex provider
+#     default: openai          # serve omnigent's "openai" family by default

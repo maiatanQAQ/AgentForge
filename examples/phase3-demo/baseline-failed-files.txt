@@ -1,0 +1,13 @@
+tests/hub-sandbox.test.ts
+tests/hub-tui-script.test.ts
+tests/hub.test.ts
+tests/i18n.test.ts
+tests/lazy-sessions.test.ts
+tests/mcp-list.test.ts
+tests/plugin-commands.test.ts
+tests/remote-file-endpoint.test.ts
+tests/sandbox-allow.test.ts
+tests/sandbox.test.ts
+tests/skill-discovery.test.ts
+tests/slash-text.test.ts
+tests/tui-seed.test.ts

@@ -1,0 +1,91 @@
+name: phase3-real-task-windows-node-resolution
+description: >
+  Real development task on the zcode-acp repository: fix the Windows
+  node-resolution defect in src/backend/resolve.ts. planner=codex explores and
+  plans, worker=acp:zcode (ZCode) implements and runs tests, reviewer=codex
+  independently verifies against the pre-recorded baseline.
+
+executor:
+  harness: codex
+
+prompt: |
+  You are the PLANNER (tech lead) for a real bug fix in the repository that is
+  your current working directory (zcode-acp, TypeScript, vitest). You NEVER
+  edit files yourself — `worker` owns all modifications, `reviewer` owns
+  verification.
+
+  ## Reported bug (observed in production on Windows 11)
+  When the ACP bridge launches the ZCode backend on Windows, the spawn fails
+  with EFTYPE: `resolveZcodeCommand()` in src/backend/resolve.ts falls back to
+  spawning the bundled `zcode.cjs` directly. Cause hypothesis (verify it
+  yourself): `candidateNodeBinaries()` returns an empty list on Windows —
+  `whichSync()` shells out to Unix `which`, and `zedBundledNodes()` globs a
+  macOS-only path. With no node candidate, the .cjs file is spawned raw.
+  Setting ZCODE_NODE=<node.exe> in the environment works around it (the
+  production deployment currently does this), but the code must work without
+  the workaround.
+
+  ## Your job
+  1. PLAN — read src/backend/resolve.ts (and anything it touches), confirm the
+     root cause, and write an acceptance contract: numbered, verifiable
+     criteria (behavior on win32, no regression on the unix path, tests).
+  2. EXECUTE — call `worker` ONCE with: the confirmed root cause, the fix
+     design you want (you decide: execPath candidate, Windows-aware whichSync,
+     etc.), file scope, and the test requirements.
+  3. REVIEW — call `reviewer` with the contract and the worker's report.
+  4. FINISH — report: root cause, plan, the worker's diff summary (files +
+     what changed), test evidence, reviewer verdict.
+
+  ## Constraints (the worker must obey; you must enforce)
+  - Only `src/backend/resolve.ts` and `tests/resolve.test.ts` (new file) may
+    change. Nothing else.
+  - Dependencies are already installed (node_modules present). Use
+    `npx vitest run tests/resolve.test.ts` for the new tests and
+    `npx tsc --noEmit` (typecheck) for types.
+  - A Windows baseline test snapshot exists NEXT TO THIS REPO (the task
+    giver provides the paths, e.g. ../baseline-vitest-full.txt and
+    ../baseline-failed-files.txt): 13 suites fail on this machine BEFORE any
+    change (platform-specific, none related to resolve). The fix must not
+    change that set. The reviewer re-runs and compares.
+
+tools:
+  worker:
+    type: agent
+    description: >
+      EXECUTOR — implement the planned fix in src/backend/resolve.ts, write
+      tests/resolve.test.ts, and run the targeted vitest file + typecheck.
+      The only role allowed to modify files.
+    prompt: |
+      You are the EXECUTOR. Implement exactly the scoped fix you are given in
+      this TypeScript repository (zcode-acp). node_modules is already
+      installed. Rules:
+      - Modify only the files the task names.
+      - After implementing, run: `npx vitest run tests/resolve.test.ts`
+        and `npx tsc --noEmit` — both must pass; include the real outputs in
+        your report. If a test fails, fix your code and re-run.
+      - Do NOT run the full test suite (a baseline snapshot exists for the
+        reviewer).
+      Report: the diff summary (files, functions), and the exact commands with
+      their real outputs.
+    executor:
+      harness: acp:zcode
+  reviewer:
+    type: agent
+    description: >
+      REVIEWER — independently verify the change: re-run the new tests and
+      typecheck, review the git diff, compare against the Windows baseline.
+      Never edits files.
+    prompt: |
+      You are the REVIEWER. Judge the change ONLY against the acceptance
+      contract. Steps:
+      1. `git diff` to see what changed (only src/backend/resolve.ts and
+         tests/resolve.test.ts are allowed; flag anything else).
+      2. Re-run `npx vitest run tests/resolve.test.ts` and
+         `npx tsc --noEmit` yourself — do not trust the worker's output.
+      3. Compare `npx vitest run` failures against the baseline snapshot:
+         ../baseline-failed-files.txt lists 13 suites that failed BEFORE the
+         change (platform-specific). The failing set must not grow.
+      Do NOT edit any files.
+      End your report with exactly one line: 最终判定：PASS or 最终判定：FAIL
+    executor:
+      harness: codex
