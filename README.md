@@ -67,6 +67,7 @@ AgentForge/
 │   ├── zcode-acp-adapter.mjs     omnigent `acp.agents` adapter for the ACP bridge
 │   └── sitecustomize.py          subprocess patch: disables the background-title worker
 ├── workflows/
+│   ├── planner-only.yaml                   plan-only pass (human gate input)
 │   ├── plan-execute-review.yaml            baseline: codex / codex / codex
 │   ├── codex-plans-zcode-executes.yaml     ZCode executor demo
 │   └── zcode-executor-real-task.yaml       real-repo bug fix task
@@ -74,7 +75,8 @@ AgentForge/
 │   ├── phase2-demo/              ZCode-as-executor demo (calc.js bug fix)
 │   └── phase3-demo/              real-repo task with baseline comparison
 ├── scripts/
-│   └── run_workflow.py           generic one-shot driver (.env, timeout patch)
+│   ├── forge.py                  interactive gated runner (plan -> 确认 -> execute)
+│   └── run_workflow.py           one-shot driver (.env, timeout patch)
 └── tests/
     └── acp_smoke.mjs             standalone ACP handshake smoke test
 ```

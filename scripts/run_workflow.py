@@ -47,7 +47,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("workflow", help="Path to the workflow YAML")
     parser.add_argument("--cwd", default=".", help="Working directory for the run (default: .)")
-    parser.add_argument("--prompt", required=True, help="Task text sent to the planner")
+    parser.add_argument("--prompt", default=None, help="Task text sent to the planner; omit to type it interactively")
     parser.add_argument(
         "--turn-timeout",
         type=float,
@@ -67,6 +67,14 @@ def main() -> None:
 
     workflow_path = Path(args.workflow).resolve()  # resolve BEFORE chdir
     os.chdir(os.path.abspath(args.cwd))  # session workspace = --cwd
+    prompt = args.prompt
+    if prompt is None:
+        # read interactively: no cmd.exe involvement, so quotes/parens/& are safe
+        prompt = input("请输入任务描述（单行，含可验证的验收契约）: ").strip()
+        if not prompt:
+            raise SystemExit("empty task")
+
+    os.environ.setdefault("PYTHONUTF8", "1")  # workflow YAMLs are UTF-8
 
     import omnigent.chat as chat  # noqa: E402  (import after .env)
 
@@ -75,7 +83,7 @@ def main() -> None:
     chat.run_chat(
         target=str(workflow_path),
         client_tools=None,
-        prompt=args.prompt,
+        prompt=prompt,
         log=True,
     )
 

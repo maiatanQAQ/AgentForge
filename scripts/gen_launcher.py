@@ -28,7 +28,6 @@ rem --- Python UTF-8 mode: workflow YAMLs are UTF-8; the default GBK locale
 rem --- would crash omnigent's config reader. PYTHONIOENCODING keeps console
 rem --- output in cp936 so Chinese still displays in this window.
 set "PYTHONUTF8=1"
-set "PYTHONIOENCODING=cp936"
 
 :menu
 cls
@@ -42,11 +41,13 @@ echo   [2]  运行自定义任务（输入工作目录 + 任务描述）
 echo   [3]  环境自检
 echo   [4]  退出
 echo.
-choice /c 1234 /n /m "请按数字选择: "
-if errorlevel 4 exit /b 0
-if errorlevel 3 goto :check
-if errorlevel 2 goto :custom
-goto :demo
+set /p "CHOICE=请输入编号并按回车: "
+if not defined CHOICE exit /b 0
+if "%CHOICE%"=="1" goto :demo
+if "%CHOICE%"=="2" goto :custom
+if "%CHOICE%"=="3" goto :check
+if "%CHOICE%"=="4" exit /b 0
+goto :menu
 
 :demo
 call :stopdaemon
@@ -54,7 +55,7 @@ echo.
 echo [1/3] 重置示例工作区（恢复带 bug 的 calc.js）...
 copy /y "%ROOT%\examples\phase2-demo\workspace\calc.js.buggy" "%ROOT%\examples\phase2-demo\workspace\calc.js" >nul
 set "WORKDIR=%ROOT%\examples\phase2-demo\workspace"
-set "PROMPT=Fix the bug in calc.js in this workspace: the add() function currently subtracts instead of adding. Acceptance contract: running 'node calc.js 2 3' prints exactly 5, and 'node calc.js -1 1' prints 0."
+set "TASK=Fix the bug in calc.js in this workspace: the add() function currently subtracts instead of adding. Acceptance contract: running 'node calc.js 2 3' prints exactly 5, and 'node calc.js -1 1' prints 0."
 goto :run
 
 :custom
@@ -63,8 +64,7 @@ echo.
 set /p "WORKDIR=工作目录（绝对路径，任务在此目录内执行）: "
 if "%WORKDIR%"=="" echo [X] 未输入目录 & pause & goto :menu
 if not exist "%WORKDIR%" echo [X] 目录不存在: %WORKDIR% & pause & goto :menu
-set /p "PROMPT=任务描述（单行，务必包含可验证的验收契约）: "
-if "%PROMPT%"=="" echo [X] 未输入任务 & pause & goto :menu
+echo 任务描述（单行，含可验证的验收契约，可含引号/括号）—— 在下一行输入后回车:
 
 :run
 echo.
@@ -73,7 +73,9 @@ echo       本窗口持续输出进度，跑完自动返回菜单。预计 2-5 �
 echo       会话链接（可在浏览器打开旁观）见下方。
 echo.
 cd /d "%ROOT%"
-"%PY%" scripts\run_workflow.py workflows\codex-plans-zcode-executes.yaml --cwd "%WORKDIR%" --prompt "%PROMPT%"
+set "TASKARG="
+if defined TASK set "TASKARG=--task \"%TASK%\""
+"%PY%" scripts\forge.py --cwd "%WORKDIR%" %TASKARG%
 set "RC=%ERRORLEVEL%"
 echo.
 if "%RC%"=="0" (
