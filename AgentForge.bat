@@ -1,7 +1,7 @@
 @echo off
 setlocal
-chcp 65001 >nul
-title AgentForge â€” planner(Codex) / worker(ZCode) / reviewer(Codex)
+chcp 936 >nul
+title AgentForge ¡ª planner(Codex) / worker(ZCode) / reviewer(Codex)
 
 rem ------------------------------------------------------------------
 rem Repo root = this file's directory
@@ -25,12 +25,12 @@ echo   AgentForge v0.1.1
 echo   planner=Codex   worker=ZCode(ACP)   reviewer=Codex
 echo ==================================================
 echo.
-echo   [1]  è¿è¡Œç¤ºä¾‹ä»»åŠ¡ â€”â€” ä¿®å¤ calc.jsï¼ˆçº¦ 2-5 åˆ†é’Ÿï¼‰
-echo   [2]  è¿è¡Œè‡ªå®šä¹‰ä»»åŠ¡ï¼ˆè¾“å…¥å·¥ä½œç›®å½• + ä»»åŠ¡æè¿°ï¼‰
-echo   [3]  çŽ¯å¢ƒè‡ªæ£€
-echo   [4]  é€€å‡º
+echo   [1]  ÔËÐÐÊ¾ÀýÈÎÎñ ¡ª¡ª ÐÞ¸´ calc.js£¨Ô¼ 2-5 ·ÖÖÓ£©
+echo   [2]  ÔËÐÐ×Ô¶¨ÒåÈÎÎñ£¨ÊäÈë¹¤×÷Ä¿Â¼ + ÈÎÎñÃèÊö£©
+echo   [3]  »·¾³×Ô¼ì
+echo   [4]  ÍË³ö
 echo.
-choice /c 1234 /n /m "è¯·æŒ‰æ•°å­—é€‰æ‹©: "
+choice /c 1234 /n /m "Çë°´Êý×ÖÑ¡Ôñ: "
 if errorlevel 4 exit /b 0
 if errorlevel 3 goto :check
 if errorlevel 2 goto :custom
@@ -39,7 +39,7 @@ goto :demo
 :demo
 call :stopdaemon
 echo.
-echo [1/3] é‡ç½®ç¤ºä¾‹å·¥ä½œåŒºï¼ˆæ¢å¤å¸¦ bug çš„ calc.jsï¼‰...
+echo [1/3] ÖØÖÃÊ¾Àý¹¤×÷Çø£¨»Ö¸´´ø bug µÄ calc.js£©...
 copy /y "%ROOT%\examples\phase2-demo\workspace\calc.js.buggy" "%ROOT%\examples\phase2-demo\workspace\calc.js" >nul
 set "WORKDIR=%ROOT%\examples\phase2-demo\workspace"
 set "PROMPT=Fix the bug in calc.js in this workspace: the add() function currently subtracts instead of adding. Acceptance contract: running 'node calc.js 2 3' prints exactly 5, and 'node calc.js -1 1' prints 0."
@@ -48,28 +48,28 @@ goto :run
 :custom
 call :stopdaemon
 echo.
-set /p "WORKDIR=å·¥ä½œç›®å½•ï¼ˆç»å¯¹è·¯å¾„ï¼Œä»»åŠ¡åœ¨æ­¤ç›®å½•å†…æ‰§è¡Œï¼‰: "
-if "%WORKDIR%"=="" echo [X] æœªè¾“å…¥ç›®å½• & pause & goto :menu
-if not exist "%WORKDIR%" echo [X] ç›®å½•ä¸å­˜åœ¨: %WORKDIR% & pause & goto :menu
-set /p "PROMPT=ä»»åŠ¡æè¿°ï¼ˆå•è¡Œï¼ŒåŠ¡å¿…åŒ…å«å¯éªŒè¯çš„éªŒæ”¶å¥‘çº¦ï¼‰: "
-if "%PROMPT%"=="" echo [X] æœªè¾“å…¥ä»»åŠ¡ & pause & goto :menu
+set /p "WORKDIR=¹¤×÷Ä¿Â¼£¨¾ø¶ÔÂ·¾¶£¬ÈÎÎñÔÚ´ËÄ¿Â¼ÄÚÖ´ÐÐ£©: "
+if "%WORKDIR%"=="" echo [X] Î´ÊäÈëÄ¿Â¼ & pause & goto :menu
+if not exist "%WORKDIR%" echo [X] Ä¿Â¼²»´æÔÚ: %WORKDIR% & pause & goto :menu
+set /p "PROMPT=ÈÎÎñÃèÊö£¨µ¥ÐÐ£¬Îñ±Ø°üº¬¿ÉÑéÖ¤µÄÑéÊÕÆõÔ¼£©: "
+if "%PROMPT%"=="" echo [X] Î´ÊäÈëÈÎÎñ & pause & goto :menu
 
 :run
 echo.
-echo [2/3] å¯åŠ¨ä¸‰è§’è‰²æµæ°´çº¿: planner(Codex) -^> worker(ZCode) -^> reviewer(Codex)
-echo       æœ¬çª—å£æŒç»­è¾“å‡ºè¿›åº¦ï¼Œè·‘å®Œè‡ªåŠ¨è¿”å›žèœå•ã€‚é¢„è®¡ 2-5 åˆ†é’Ÿã€‚
-echo       ä¼šè¯é“¾æŽ¥ï¼ˆå¯åœ¨æµè§ˆå™¨æ‰“å¼€æ—è§‚ï¼‰è§ä¸‹æ–¹ã€‚
+echo [2/3] Æô¶¯Èý½ÇÉ«Á÷Ë®Ïß: planner(Codex) -^> worker(ZCode) -^> reviewer(Codex)
+echo       ±¾´°¿Ú³ÖÐøÊä³ö½ø¶È£¬ÅÜÍê×Ô¶¯·µ»Ø²Ëµ¥¡£Ô¤¼Æ 2-5 ·ÖÖÓ¡£
+echo       »á»°Á´½Ó£¨¿ÉÔÚä¯ÀÀÆ÷´ò¿ªÅÔ¹Û£©¼ûÏÂ·½¡£
 echo.
 cd /d "%ROOT%"
 "%PY%" scripts\run_workflow.py workflows\codex-plans-zcode-executes.yaml --cwd "%WORKDIR%" --prompt "%PROMPT%"
 set "RC=%ERRORLEVEL%"
 echo.
 if "%RC%"=="0" (
-  echo [OK] æµæ°´çº¿å®Œæˆï¼ˆé€€å‡ºç  0ï¼‰ã€‚è¯·æ£€æŸ¥ä¸Šæ–¹ reviewer æ˜¯å¦ PASSï¼Œ
-  echo      å¹¶åˆ°å·¥ä½œç›®å½•æŸ¥çœ‹å®žé™…æ”¹åŠ¨ã€‚
+  echo [OK] Á÷Ë®ÏßÍê³É£¨ÍË³öÂë 0£©¡£Çë¼ì²éÉÏ·½ reviewer ÊÇ·ñ PASS£¬
+  echo      ²¢µ½¹¤×÷Ä¿Â¼²é¿´Êµ¼Ê¸Ä¶¯¡£
 ) else (
-  echo [X] æµæ°´çº¿å¤±è´¥ï¼ˆé€€å‡ºç  %RC%ï¼‰ã€‚
-  echo     æŽ’éšœ: docs\architecture.md æœ«å°¾çš„å¤±è´¥æ¨¡å¼è¡¨ï¼›é‡è·‘å‰å…ˆé€‰èœå• [3] è‡ªæ£€ã€‚
+  echo [X] Á÷Ë®ÏßÊ§°Ü£¨ÍË³öÂë %RC%£©¡£
+  echo     ÅÅÕÏ: docs\architecture.md Ä©Î²µÄÊ§°ÜÄ£Ê½±í£»ÖØÅÜÇ°ÏÈÑ¡²Ëµ¥ [3] ×Ô¼ì¡£
 )
 echo.
 pause
@@ -77,12 +77,12 @@ goto :menu
 
 :check
 echo.
-echo [çŽ¯å¢ƒè‡ªæ£€]
-if exist "%ROOT%\.env" (echo   [OK] .env å­˜åœ¨) else (echo   [!!] .env ç¼ºå¤± â€”â€” å¤åˆ¶ .env.example ä¸º .env å¹¶å¡«å†™ OMNIGENT_CODEX_PATH)
-if exist "%ROOT%\adapters\zcode-acp\node_modules\zcode-acp-server\dist\index.js" (echo   [OK] ACP æ¡¥å·²æœ¬åœ°å®‰è£…) else (echo   [!!] æ¡¥æœªæœ¬åœ°å®‰è£… â€”â€” åœ¨ adapters\zcode-acp ç›®å½•æ‰§è¡Œ: npm install zcode-acp-server)
-where codex >nul 2>&1 && (echo   [OK] codex å¯ä»Ž PATH è§£æž) || (echo   [!!] codex ä¸åœ¨ PATH â€”â€” æ£€æŸ¥ .env çš„ OMNIGENT_CODEX_PATHï¼ˆæ¡Œé¢ç‰ˆå‡çº§åŽè·¯å¾„ä¼šå˜ï¼‰)
-"%PY%" -c "import omnigent" >nul 2>&1 && (echo   [OK] omnigent å¯å¯¼å…¥) || (echo   [X] omnigent ä¸å¯å¯¼å…¥ â€”â€” venv python è·¯å¾„ä¸å¯¹ï¼Œé‡è£…: uv tool install omnigent)
-node --version >nul 2>&1 && (echo   [OK] node å­˜åœ¨) || (echo   [!!] node ä¸åœ¨ PATH â€”â€” ZCode/æ¡¥éœ€è¦ Node ^>= 22)
+echo [»·¾³×Ô¼ì]
+if exist "%ROOT%\.env" (echo   [OK] .env ´æÔÚ) else (echo   [!!] .env È±Ê§ ¡ª¡ª ¸´ÖÆ .env.example Îª .env ²¢ÌîÐ´ OMNIGENT_CODEX_PATH)
+if exist "%ROOT%\adapters\zcode-acp\node_modules\zcode-acp-server\dist\index.js" (echo   [OK] ACP ÇÅÒÑ±¾µØ°²×°) else (echo   [!!] ÇÅÎ´±¾µØ°²×° ¡ª¡ª ÔÚ adapters\zcode-acp Ä¿Â¼Ö´ÐÐ: npm install zcode-acp-server)
+where codex >nul 2>&1 && (echo   [OK] codex ¿É´Ó PATH ½âÎö) || (echo   [!!] codex ²»ÔÚ PATH ¡ª¡ª ¼ì²é .env µÄ OMNIGENT_CODEX_PATH£¨×ÀÃæ°æÉý¼¶ºóÂ·¾¶»á±ä£©)
+"%PY%" -c "import omnigent" >nul 2>&1 && (echo   [OK] omnigent ¿Éµ¼Èë) || (echo   [X] omnigent ²»¿Éµ¼Èë ¡ª¡ª venv python Â·¾¶²»¶Ô£¬ÖØ×°: uv tool install omnigent)
+node --version >nul 2>&1 && (echo   [OK] node ´æÔÚ) || (echo   [!!] node ²»ÔÚ PATH ¡ª¡ª ZCode/ÇÅÐèÒª Node ^>= 22)
 echo.
 pause
 goto :menu
