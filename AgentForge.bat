@@ -18,6 +18,12 @@ if not exist "%PY%" (
   exit /b 1
 )
 
+rem --- Python UTF-8 mode: workflow YAMLs are UTF-8; the default GBK locale
+rem --- would crash omnigent's config reader. PYTHONIOENCODING keeps console
+rem --- output in cp936 so Chinese still displays in this window.
+set "PYTHONUTF8=1"
+set "PYTHONIOENCODING=cp936"
+
 :menu
 cls
 echo ==================================================
