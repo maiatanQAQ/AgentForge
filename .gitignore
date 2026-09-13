@@ -19,3 +19,7 @@ __pycache__/
 # OS / editor noise
 .DS_Store
 Thumbs.db
+
+# ZCode/agent runtime state
+.zcode/
+examples/phase2-demo/workspace/calc.js

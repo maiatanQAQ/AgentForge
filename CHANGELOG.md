@@ -4,6 +4,24 @@ All notable changes to AgentForge are documented here.
 Format follows [Keep a Changelog](https://keepachangelog.com/); versioning is
  SemVer-flavored (`vMAJOR.MINOR.PATCH-PRERELEASE`).
 
+## v0.1.1 — 2026-09-13
+
+### Fixed
+
+- `scripts/run_workflow.py`: the `--cwd` argument is now applied — the session
+  workspace (and therefore the executor's working directory) is the directory
+  given on the command line; previously the argument was parsed but ignored,
+  so the executor ran in the repository root.
+- `examples/phase2-demo`: the `calc.js.buggy` fixture shipped in v0.1.0-alpha
+  accidentally contained the fixed version; it is again the actual buggy input.
+
+### Added
+
+- `adapters/zcode-acp/package.json` + lockfile — pinning the
+  `zcode-acp-server` bridge for a deterministic local install
+  (`npm install` inside `adapters/zcode-acp/`), which the adapter resolves
+  via `require.resolve` when no global install is visible.
+
 ## v0.1.0-alpha — 2026-09-13
 
 First public pre-release. Everything below was validated end-to-end on

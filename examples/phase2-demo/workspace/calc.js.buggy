@@ -1,6 +1,6 @@
 // calc.js — buggy on purpose: add() subtracts.
 function add(a, b) {
-  return a + b;
+  return a - b;
 }
 
 const [x, y] = [Number(process.argv[2] ?? 2), Number(process.argv[3] ?? 3)];

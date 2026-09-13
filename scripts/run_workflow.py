@@ -65,12 +65,15 @@ def main() -> None:
         f"{sitecustomize_dir}{os.pathsep}{existing}" if existing else sitecustomize_dir
     )
 
+    workflow_path = Path(args.workflow).resolve()  # resolve BEFORE chdir
+    os.chdir(os.path.abspath(args.cwd))  # session workspace = --cwd
+
     import omnigent.chat as chat  # noqa: E402  (import after .env)
 
     chat._PER_TURN_TIMEOUT_S = args.turn_timeout  # noqa: SLF001 — documented patch point
 
     chat.run_chat(
-        target=str(Path(args.workflow).resolve()),
+        target=str(workflow_path),
         client_tools=None,
         prompt=args.prompt,
         log=True,

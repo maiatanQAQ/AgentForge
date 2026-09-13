@@ -1,6 +1,6 @@
 # AgentForge
 
-**Version:** v0.1.0-alpha · **License:** Apache-2.0
+**Version:** v0.1.1 · **License:** Apache-2.0
 
 AgentForge is a general multi-agent orchestration framework built on
 [omnigent](https://github.com/omnigent-ai/omnigent) (Apache-2.0). It runs a
